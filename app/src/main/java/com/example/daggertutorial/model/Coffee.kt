@@ -1,7 +1,10 @@
 package com.example.daggertutorial.model
 
 import android.util.Log
+import com.example.daggertutorial.di.Milk
+import com.example.daggertutorial.di.Suger
 import javax.inject.Inject
+import javax.inject.Named
 
 // No DI
 // Problem1 : Testing
@@ -43,23 +46,25 @@ import javax.inject.Inject
 // دجر بتمشى ازاى الاول ع الكونستركتور وبعد كده الfields then auto methods  يعنى بيروح للمثود من غير ماانديها
 // لو انا عندى مثود عاوزاها تحصل كل ما استخدم كلاس معين هعملها انجكت ودجر هتنديها لوحدها عشان نحارب ال boilerplate code  عشان هفضل انديها كل ما استخدم الكلاس ده
  */
-class Coffee @Inject constructor() {
+//-------------------@Module and @Provide -----------------
+/*
+-> هنا بنستخدم @Modules لما يكون عندى كلاس متنزل من lib or sdk انا منزلها ومش هقدر اعدل ع المحتوى بتعها
+ واحط فوق الكونستركتور @Inject  او فوق الفيلد او المثود زى ما كنت بعمل قبل كده  عشان دى كلاسز انا عملها بنفسى اعدل براحتى فيها
+ (باختصار هنتكلم هنا عن الكود اللى مش اقدر اعدل عليه ازاى اقدر استقدم فيه دجر)
+ --------------------------------
+ لو عندى كلاس A بيعتمد ع كلاس B  يعنى عشان اكريت اوبجكت من  A لازم اوبكجت من B يكون موجود الاول
+  A id Dependent, B is Dependency
+
+
+ */
+
+class Coffee // Constractor injection
+@Inject constructor(private var farm: Farm, @Suger private var suger: Int,
+                    @Milk private var milk: Int) {
     // Field Injection
     @Inject
     lateinit var river: River
 
-    @Inject
-    lateinit var farm: Farm
-
-    /*
-// Constractor injection
-   @Inject
-   constructor(river: River, farm: Farm) {
-       Log.d(LOG_TAG, "Coffee: ")
-       this.river = river
-       this.farm = farm
-  }
-*/
     // Method Injection
     @Inject
     fun checkElectricity(){
@@ -67,7 +72,7 @@ class Coffee @Inject constructor() {
     }
 
     fun getCoffeeCup(): String {
-        return farm.getBeans() + "+" + river.getWater()
+        return farm.getBeans() + "+" + river.getWater() + "+" + "suger: " + suger + "+" + "milk: " + milk
     }
 
     companion object {

@@ -19,9 +19,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-       val component:CoffeeComponent = DaggerCoffeeComponent.create()
+       val component:CoffeeComponent = DaggerCoffeeComponent.builder().suger(3).milk(5).build()
         component.inject(MainActivity@this)
-        coffee.checkElectricity()
         Log.d(TAG, coffee.getCoffeeCup())
     }
 }
